@@ -1,0 +1,22 @@
+
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+  deploy:
+
+    runs-on: ubuntu-latest
+
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: "create a docker image"
+      run: docker build -t githubactions12/next-js-app .
+    - run: echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+    - name: "push the image"
+      run: docker push githubactions12/next-js-app:latest
+
